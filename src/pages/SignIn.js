@@ -15,8 +15,8 @@ import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
 import ColorModeSelect from "../theme/ColorModeSelect";
 
-import rawApi from "../api/rawAxios";
-import { setAccessToken } from "../utils/tokenService";
+import { useAuth } from "../contexts/AuthContext";
+import { loginRequest } from "../api/endpoints/auth";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -71,6 +71,8 @@ export default function SignIn(props) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
 
+  const { setUser } = useAuth();
+
   const validateInputs = () => {
     const email = document.getElementById("email");
     const password = document.getElementById("password");
@@ -111,16 +113,9 @@ export default function SignIn(props) {
     const password = data.get("password");
 
     try {
-      const res = await rawApi.post("/api/auth/login", {
-        email,
-        password,
-      });
+      const data = await loginRequest({ email, password });
 
-      setAccessToken({
-        access_token: res.data.access_token,
-        expires_in: res.data.expires_in,
-      });
-
+      setUser(data.user);
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
@@ -140,7 +135,7 @@ export default function SignIn(props) {
 
         <Card variant="outlined">
           <Typography component="h1" variant="h4">
-            Sign in
+            User Dashboard
           </Typography>
 
           {error && (
