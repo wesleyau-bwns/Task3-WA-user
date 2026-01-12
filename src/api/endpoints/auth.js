@@ -30,6 +30,10 @@ export const getAuthenticatedUser = async () => {
   return protectedApi.get("/auth/user");
 };
 
+export const getPermissions = async () => {
+  return protectedApi.get("/auth/permissions");
+};
+
 export const logoutRequest = async () => {
   return protectedApi.post("/auth/logout");
 };

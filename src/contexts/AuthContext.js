@@ -1,41 +1,47 @@
 import { createContext, useContext, useState } from "react";
-import { getAuthenticatedUser } from "../api/endpoints/auth";
+import { getAuthenticatedUser, getPermissions } from "../api/endpoints/auth";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Initialize user from localStorage if available
-  const [user, internalSetUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
+  const [user, setUser] = useState(null);
+  const [permissions, setPermissions] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // Persist user across browser refreshes
-  const setUser = (newUser) => {
-    internalSetUser(newUser);
-    if (newUser) {
-      localStorage.setItem("user", JSON.stringify(newUser));
-    } else {
-      localStorage.removeItem("user");
-    }
-  };
 
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const data = await getAuthenticatedUser();
-      setUser(data.user);
-    } catch (error) {
+      const response = await getAuthenticatedUser();
+      const user = response.data.user || null;
+      setUser(user);
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchPermissions = async () => {
+    try {
+      const response = await getPermissions();
+      const perms = response.data.permissions || [];
+      setPermissions(perms);
+    } catch (err) {
+      setPermissions([]);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, fetchUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        permissions,
+        loading,
+        setUser,
+        fetchUser,
+        fetchPermissions,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
