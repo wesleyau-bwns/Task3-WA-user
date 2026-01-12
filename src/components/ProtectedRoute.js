@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import LoadingScreen from "./LoadingScreen";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function ProtectedRoute({

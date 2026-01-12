@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -7,6 +7,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import KeyIcon from "@mui/icons-material/Key";
 
 import { useLogout } from "../services/logoutService";
 import { useAuth } from "../contexts/AuthContext";
@@ -14,6 +16,7 @@ import { ALL_PAGES } from "../constants/pages";
 
 export default function MenuContent() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const logout = useLogout();
 
@@ -53,6 +56,22 @@ export default function MenuContent() {
 
       {/* Secondary menu */}
       <List dense>
+        <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItemButton onClick={() => navigate("/profile")}>
+            <ListItemIcon>
+              <AccountBoxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItemButton onClick={() => navigate("/password")}>
+            <ListItemIcon>
+              <KeyIcon />
+            </ListItemIcon>
+            <ListItemText primary="Password" />
+          </ListItemButton>
+        </ListItem>
         <ListItem disablePadding sx={{ display: "block" }}>
           <ListItemButton onClick={logout}>
             <ListItemIcon>
