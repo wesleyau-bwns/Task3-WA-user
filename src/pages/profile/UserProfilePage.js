@@ -53,17 +53,32 @@ export default function UserProfilePage() {
       });
   }, []);
 
-  // -------------------- Handlers --------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSavingProfile(true);
     setErrors({});
+
     try {
-      const res = await updateProfile(profileInfo);
+      const formData = new FormData();
+
+      // Append all profile fields
+      for (const key in profileInfo) {
+        const value = profileInfo[key];
+        if (value !== undefined && value !== null && value !== "") {
+          formData.append(key, profileInfo[key]);
+        }
+      }
+
+      if (profileInfo.avatar && profileInfo.avatar instanceof File) {
+        formData.append("avatar", profileInfo.avatar);
+      }
+
+      const res = await updateProfile(formData);
+
       alert(res.data.message);
       setSavingProfile(false);
 
-      fetchUser(); // Update the AuthContext
+      fetchUser(); // Update context
       navigate("/dashboard");
     } catch (error) {
       setSavingProfile(false);
@@ -73,7 +88,6 @@ export default function UserProfilePage() {
         console.error(error);
         alert("Something went wrong. Please try again.");
       }
-    } finally {
     }
   };
 
@@ -270,7 +284,7 @@ export default function UserProfilePage() {
             <Grid size={12}>
               <TextField
                 fullWidth
-                label="Address Line 2"
+                label="Address Line 2 (Optional)"
                 value={profileInfo.address_line2}
                 onChange={(e) =>
                   setProfileInfo({

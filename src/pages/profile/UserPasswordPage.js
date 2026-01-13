@@ -14,7 +14,7 @@ export default function UserPasswordPage() {
     new_password_confirmation: "",
   });
 
-  const handlePasswordSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSavingPassword(true);
     setErrors({});
@@ -63,7 +63,7 @@ export default function UserPasswordPage() {
         <Typography variant="h6" mb={4} display={"none"}>
           Change Password
         </Typography>
-        <form onSubmit={handlePasswordSubmit}>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={4}>
             {/* Current Password */}
             <Grid size={12}>

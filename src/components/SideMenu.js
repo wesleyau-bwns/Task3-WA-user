@@ -52,12 +52,11 @@ export default function SideMenu() {
       >
         <Avatar
           alt={user?.name}
-          src={
-            user?.avatar ||
-            "https://bpsp-api-user.bw-group.cc/storage/profile/5856.jpg"
-          }
+          src={user?.avatar}
           sx={{ width: 32, height: 32 }}
-        />
+        >
+          {user?.name ? user.name.charAt(0).toUpperCase() : "?"}
+        </Avatar>
         <Box sx={{ mr: "auto" }}>
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
             {user?.name}
