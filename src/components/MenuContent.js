@@ -37,6 +37,8 @@ export default function MenuContent() {
       <List dense>
         {menuPages.map((page) => {
           const pagePath = `/${page.path}`;
+          const Icon = page.icon;
+
           return (
             <ListItem key={page.path} disablePadding>
               <ListItemButton
@@ -45,7 +47,7 @@ export default function MenuContent() {
                 selected={location.pathname === pagePath}
               >
                 <ListItemIcon>
-                  <MenuIcon />
+                  {Icon ? <Icon fontSize="small" /> : <MenuIcon />}
                 </ListItemIcon>
                 <ListItemText primary={page.label} />
               </ListItemButton>
